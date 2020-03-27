@@ -6,7 +6,7 @@
 bank-api
 |-- modules(account, trasaction) // You can create N modules you wish
 |-- config  // Set the basic configuration like router
-|-- helper  // Common generic's constant, common functions and other stuff used in the whole api
+|-- helper  // Common generic constants, common functions and other stuff used in the whole api
 |-- storage // Database configs and start
 |-- init.go // Api start
 ```
@@ -23,7 +23,7 @@ docker-compose up --build --force-recreate
 Supose you are in /bank-api directory:
 ```bash
     go test ./...
-```
+``` 
 
 ## Usage
 
