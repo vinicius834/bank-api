@@ -13,8 +13,6 @@ services:
       - mongodb
     links:
       - mongodb
-    volumes: 
-      -  ./data:/app/data
    
   mongodb:
     image: mongo:latest
