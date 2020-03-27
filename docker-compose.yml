@@ -15,10 +15,7 @@ services:
       - mongodb
     volumes: 
       -  ./data:/app/data
-    # command: >  
-    #   bash -c "sleep 5 && go run /app/data/import_data.go"
    
-
   mongodb:
     image: mongo:latest
     container_name: mongodb
@@ -26,8 +23,7 @@ services:
       - 27017:27017
     volumes:
       -  ./data:/app/data
-    # command: sh -c "mongoimport --db api_bank --collection OperationType --type json --file /app/data/operation_type.json --jsonArray"
-    # "sleep 10 && chmod +x /app/data/import_data.sh && sh /app/data/import_data.sh"
+
     
     
     
