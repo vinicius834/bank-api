@@ -54,7 +54,7 @@ func (accountRepository *AccountRepository) FindByID(id string) (*Account, []err
 
 func (accountRepository *AccountRepository) FindByDocument(documentNumber string) (*Account, []error) {
 	var accountFound *Account
-	filter := bson.M{"documentNumber": documentNumber}
+	filter := bson.M{"document": documentNumber}
 	err := accountRepository.Database.FindOne(accountRepository.CollectionName, filter).Decode(&accountFound)
 	if err != nil {
 		return nil, []error{errors.New(helper.NotFoundMessageError)}

@@ -6,5 +6,5 @@ import (
 
 type Account struct {
 	ID             primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	DocumentNumber string             `json:"documentNumber" bson:"documentNumber" validate:"required"`
+	DocumentNumber string             `json:"document" bson:"document" validate:"required"`
 }
