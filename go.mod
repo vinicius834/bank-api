@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/gin-gonic/gin v1.6.1
+	github.com/go-pg/pg/v9 v9.1.5 // indirect
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/golang/mock v1.4.3
 	github.com/joho/godotenv v1.3.0

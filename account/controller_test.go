@@ -117,7 +117,7 @@ func (suite *ControllerTestSuite) TestFindByID() {
 		expectedError    []error
 	}{
 		{
-			expectedAccount:  &account.Account{ID: objectID, Document: "12121212", AvalaibleLimit: 1000 },
+			expectedAccount:  &account.Account{ID: objectID, Document: "12121212", AvalaibleLimit: 1000},
 			url:              fmt.Sprintf("/accounts/%v", objectID.Hex()),
 			method:           "GET",
 			expectedCode:     http.StatusOK,
