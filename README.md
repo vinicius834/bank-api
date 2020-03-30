@@ -31,7 +31,8 @@ Supose you are in /bank-api directory:
 ```bash
 POST /accounts
 {
-	"documentNumber": "<document-number."
+	"document": "<document>",
+	"avalaible_limit: <limit>
 }
 ```
 ### Get account by id
