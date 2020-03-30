@@ -11,7 +11,7 @@ import (
 )
 
 func ErrorsExist(errs []error) bool {
-	return errs != nil
+	return errs != nil && len(errs) > 0
 }
 
 func ProcessRequest(r http.Handler, method, url, bodyData string) *httptest.ResponseRecorder {

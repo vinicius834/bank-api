@@ -56,19 +56,19 @@ func (suite *ControllerTestSuite) TestNewAccount() {
 		expectedError    []error
 	}{
 		{
-			accountCreated:   &account.Account{ID: objectID, DocumentNumber: "12121212"},
+			accountCreated:   &account.Account{ID: objectID, Document: "12121212", AvalaibleLimit: 1000},
 			url:              account.AccountEndpoints.NewAccount,
 			method:           "POST",
-			bodyData:         "{\"documentNumber\": \"12121212\"}",
+			bodyData:         "{\"document\": \"12121212\", \"avalaible_limit\": 1000}",
 			expectedCode:     http.StatusCreated,
-			responseExpected: fmt.Sprintf("{\"status\":%v,\"data\":{\"id\":\"%v\",\"documentNumber\":\"%v\"}}", http.StatusCreated, objectID.Hex(), "12121212"),
+			responseExpected: fmt.Sprintf("{\"status\":%v,\"data\":{\"id\":\"%v\",\"document\":\"%v\",\"avalaible_limit\":%v}}", http.StatusCreated, objectID.Hex(), "12121212", 1000),
 			expectedError:    nil,
 		},
 		{
 			accountCreated:   nil,
 			url:              account.AccountEndpoints.NewAccount,
 			method:           "POST",
-			bodyData:         "{\"documentNumber\": \"12121212\"}",
+			bodyData:         "{\"document\": \"12121212\", \"avalaible_limit\": 1000}",
 			expectedCode:     http.StatusBadRequest,
 			responseExpected: fmt.Sprintf("{\"status\":%v,\"errors\":[\"%v\"]}", http.StatusBadRequest, "duplicate document"),
 			expectedError:    []error{errors.New(helper.DuplicateMessageError)},
@@ -77,18 +77,18 @@ func (suite *ControllerTestSuite) TestNewAccount() {
 			accountCreated:   nil,
 			url:              account.AccountEndpoints.NewAccount,
 			method:           "POST",
-			bodyData:         "{\"documentNumber\": \"\"}",
+			bodyData:         "{\"document\": \"\", \"avalaible_limit\": }",
 			expectedCode:     http.StatusBadRequest,
-			responseExpected: fmt.Sprintf("{\"status\":%v,\"errors\":[\"%v\"]}", http.StatusBadRequest, "DocumentNumber field invalid"),
+			responseExpected: fmt.Sprintf("{\"status\":%v,\"errors\":[\"%v\",\"%v\"]}", http.StatusBadRequest, "Document field invalid", "AvalaibleLimit field invalid"),
 			expectedError:    nil,
 		},
 		{
 			accountCreated:   nil,
 			url:              account.AccountEndpoints.NewAccount,
 			method:           "POST",
-			bodyData:         "{\"documentNumber\": }",
+			bodyData:         "{\"document\":  , \"avalaible_limit\":}",
 			expectedCode:     http.StatusBadRequest,
-			responseExpected: fmt.Sprintf("{\"status\":%v,\"errors\":[\"%v\"]}", http.StatusBadRequest, "DocumentNumber field invalid"),
+			responseExpected: fmt.Sprintf("{\"status\":%v,\"errors\":[\"%v\",\"%v\"]}", http.StatusBadRequest, "Document field invalid", "AvalaibleLimit field invalid"),
 			expectedError:    nil,
 		},
 	}
@@ -117,11 +117,11 @@ func (suite *ControllerTestSuite) TestFindByID() {
 		expectedError    []error
 	}{
 		{
-			expectedAccount:  &account.Account{ID: objectID, DocumentNumber: "12121212"},
+			expectedAccount:  &account.Account{ID: objectID, Document: "12121212", AvalaibleLimit: 1000 },
 			url:              fmt.Sprintf("/accounts/%v", objectID.Hex()),
 			method:           "GET",
 			expectedCode:     http.StatusOK,
-			responseExpected: fmt.Sprintf("{\"status\":%v,\"data\":{\"id\":\"%v\",\"documentNumber\":\"%v\"}}", http.StatusOK, objectID.Hex(), "12121212"),
+			responseExpected: fmt.Sprintf("{\"status\":%v,\"data\":{\"id\":\"%v\",\"document\":\"%v\",\"avalaible_limit\":%v}}", http.StatusOK, objectID.Hex(), "12121212", 1000),
 			expectedError:    nil,
 		},
 		{

@@ -1,6 +1,7 @@
 package transaction
 
 import (
+	"bank-api/account"
 	"bank-api/storage"
 	"net/http"
 
@@ -16,6 +17,7 @@ var (
 	transactionRepository *TransactionRepository
 	transactionService    *TransactionService
 	transactionController *TransactionController
+	accountService        *account.AccountService
 	transactionHelper     *Helper
 	TransactionEndpoints  = initTransactionEndpoints()
 )
@@ -28,6 +30,7 @@ func initTransactionEndpoints() *Endpoints {
 }
 
 func InitTrasnactionModule(mongoDB storage.IMongoDB, router *gin.Engine) *gin.Engine {
+	initAccountService(mongoDB)
 	initRepository(mongoDB)
 	initService()
 	initControllers()
@@ -36,6 +39,9 @@ func InitTrasnactionModule(mongoDB storage.IMongoDB, router *gin.Engine) *gin.En
 	return router
 }
 
+func initAccountService(mongoDB storage.IMongoDB) {
+	accountService = account.NewAccountService(account.NewAccountRepository(mongoDB, account.AccountCollection))
+}
 func initHelper() {
 	transactionHelper = NewTransactionHelper(&http.Client{})
 }
@@ -45,7 +51,7 @@ func initRepository(mongoDB storage.IMongoDB) {
 }
 
 func initService() {
-	transactionService = NewTransactionService(transactionRepository, transactionHelper)
+	transactionService = NewTransactionServiceWithAccount(transactionRepository, transactionHelper, accountService)
 }
 
 func initControllers() {

@@ -62,3 +62,31 @@ func (mr *MockIAccountServiceMockRecorder) FindByID(id interface{}) *gomock.Call
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockIAccountService)(nil).FindByID), id)
 }
+
+// CheckAccountHasLimit mocks base method
+func (m *MockIAccountService) CheckAccountHasLimit(id string, amountToCheck float64) []error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckAccountHasLimit", id, amountToCheck)
+	ret0, _ := ret[0].([]error)
+	return ret0
+}
+
+// CheckAccountHasLimit indicates an expected call of CheckAccountHasLimit
+func (mr *MockIAccountServiceMockRecorder) CheckAccountHasLimit(id, amountToCheck interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckAccountHasLimit", reflect.TypeOf((*MockIAccountService)(nil).CheckAccountHasLimit), id, amountToCheck)
+}
+
+// UpdateLimit mocks base method
+func (m *MockIAccountService) UpdateLimit(id string, amount float64) []error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateLimit", id, amount)
+	ret0, _ := ret[0].([]error)
+	return ret0
+}
+
+// UpdateLimit indicates an expected call of UpdateLimit
+func (mr *MockIAccountServiceMockRecorder) UpdateLimit(id, amount interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLimit", reflect.TypeOf((*MockIAccountService)(nil).UpdateLimit), id, amount)
+}

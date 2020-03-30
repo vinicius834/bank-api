@@ -1,5 +1,6 @@
 package account
 
 const (
-	AccountCollection = "Account"
+	AccountCollection       = "Account"
+	AccountHasNotLimitError = "account has not limit"
 )

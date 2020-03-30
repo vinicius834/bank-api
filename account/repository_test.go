@@ -32,12 +32,12 @@ func TestRepositorySuite(t *testing.T) {
 }
 
 func (suite *RepositoryTestSuite) TestNewAccount() {
-	newAccount := account.Account{DocumentNumber: "1234"}
+	newAccount := account.Account{Document: "1234"}
 	accountCreated, err := suite.accountRepository.NewAccount(newAccount)
 	if err != nil {
 		suite.T().Errorf(fmt.Sprint(err))
 	}
-	suite.Assert().Equal(newAccount.DocumentNumber, accountCreated.DocumentNumber)
+	suite.Assert().Equal(newAccount.Document, accountCreated.Document)
 }
 
 func (suite *RepositoryTestSuite) TestFindByID() {
@@ -46,8 +46,8 @@ func (suite *RepositoryTestSuite) TestFindByID() {
 		expected     *account.Account
 		errorMessage interface{}
 	}{
-		{acc: account.Account{DocumentNumber: "12121"}, expected: nil, errorMessage: nil},
-		{acc: account.Account{DocumentNumber: "12121221212121212"}, expected: nil, errorMessage: helper.NotFoundMessageError},
+		{acc: account.Account{Document: "12121", AvalaibleLimit: 1000}, expected: nil, errorMessage: nil},
+		{acc: account.Account{Document: "12121221212121212", AvalaibleLimit: 1000}, expected: nil, errorMessage: helper.NotFoundMessageError},
 	}
 	for i, item := range data {
 		response, err := suite.accountRepository.NewAccount(item.acc)
@@ -74,8 +74,8 @@ func (suite *RepositoryTestSuite) TestFindByDocument() {
 		expected     *account.Account
 		errorMessage interface{}
 	}{
-		{acc: account.Account{DocumentNumber: "12121"}, expected: nil, errorMessage: nil},
-		{acc: account.Account{DocumentNumber: "12121221212121212"}, expected: nil, errorMessage: helper.NotFoundMessageError},
+		{acc: account.Account{Document: "12121", AvalaibleLimit: 1000}, expected: nil, errorMessage: nil},
+		{acc: account.Account{Document: "12121221212121212", AvalaibleLimit: 100}, expected: nil, errorMessage: helper.NotFoundMessageError},
 	}
 	for i, item := range data {
 		response, err := suite.accountRepository.NewAccount(item.acc)
@@ -86,9 +86,9 @@ func (suite *RepositoryTestSuite) TestFindByDocument() {
 			item.acc.ID = response.ID
 			item.expected = &item.acc
 		} else {
-			item.acc.DocumentNumber = "-91829198291982s"
+			item.acc.Document = "-91829198291982s"
 		}
-		accountFound, errs := suite.accountRepository.FindByDocument(item.acc.DocumentNumber)
+		accountFound, errs := suite.accountRepository.FindByDocument(item.acc.Document)
 		if helper.ErrorsExist(errs) {
 			suite.Assert().Equal(item.errorMessage, errs[0].Error())
 		}

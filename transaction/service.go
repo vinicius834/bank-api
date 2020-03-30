@@ -1,6 +1,7 @@
 package transaction
 
 import (
+	"bank-api/account"
 	"bank-api/helper"
 	"errors"
 	"time"
@@ -9,6 +10,7 @@ import (
 type TransactionService struct {
 	transactionRepository ITransactionRepository
 	transactionHelper     IHelper
+	accountService        account.IAccountService
 }
 
 type ITransactionService interface {
@@ -16,22 +18,42 @@ type ITransactionService interface {
 	NewOperationType(newOperationType OperationType) (*OperationType, []error)
 }
 
-func NewTransactionService(transactionRepository ITransactionRepository, transactionHelper IHelper) *TransactionService {
-	return &TransactionService{transactionRepository: transactionRepository, transactionHelper: transactionHelper}
+func NewTransactionServiceWithAccount(
+	transactionRepository ITransactionRepository,
+	transactionHelper IHelper,
+	accountService account.IAccountService) *TransactionService {
+	return &TransactionService{transactionRepository: transactionRepository, transactionHelper: transactionHelper, accountService: accountService}
+}
+
+func NewTransactionService(transactionRepository ITransactionRepository, transactionHelper IHelper, accountService account.IAccountService) *TransactionService {
+	return &TransactionService{transactionRepository: transactionRepository, transactionHelper: transactionHelper, accountService: accountService}
 }
 
 func (transactionService *TransactionService) NewTransaction(newTransaction Transaction) (*Transaction, []error) {
 	operationType, errs := transactionService.transactionRepository.FindOperationTypeById(newTransaction.OperationType.Hex())
+
 	if helper.ErrorsExist(errs) {
 		return nil, []error{errors.New(InvalidOperationTypeError)}
 	}
 
 	newTransaction.EventDate = time.Now().Format(time.RFC3339Nano)
 	newTransaction.Amount = transactionService.transactionHelper.TransformAmount(newTransaction.Amount, operationType.IsCredit)
+
+	errs = transactionService.accountService.CheckAccountHasLimit(newTransaction.AccountID.Hex(), newTransaction.Amount)
+	if helper.ErrorsExist(errs) {
+		return nil, errs
+	}
+
+	errs = transactionService.accountService.UpdateLimit(newTransaction.AccountID.Hex(), newTransaction.Amount)
+	if helper.ErrorsExist(errs) {
+		return nil, errs
+	}
+
 	transactionInsertedResponse, errs := transactionService.transactionRepository.NewTransaction(newTransaction)
 	if helper.ErrorsExist(errs) {
 		return nil, errs
 	}
+
 	return transactionInsertedResponse, nil
 }
 

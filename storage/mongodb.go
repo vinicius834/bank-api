@@ -20,6 +20,7 @@ type IMongoDB interface {
 	GetCollection(collectionName string) *mongo.Collection
 	InsertOne(collectionName string, document interface{}) (*mongo.InsertOneResult, error)
 	FindOne(collectionName string, filter bson.M) *mongo.SingleResult
+	UpdateOne(collectionName string, id bson.M, document bson.M) (*mongo.UpdateResult, error)
 }
 
 func NewMongoDB(url, dbName string) *MongoDB {
@@ -57,4 +58,9 @@ func (mongodb *MongoDB) InsertOne(collectionName string, document interface{}) (
 func (mongodb *MongoDB) FindOne(collectionName string, filter bson.M) *mongo.SingleResult {
 	ctx := context.Background()
 	return mongodb.GetCollection(collectionName).FindOne(ctx, filter)
+}
+
+func (mongodb *MongoDB) UpdateOne(collectionName string, id bson.M, document bson.M) (*mongo.UpdateResult, error) {
+	ctx := context.Background()
+	return mongodb.GetCollection(collectionName).UpdateOne(ctx, id, document)
 }

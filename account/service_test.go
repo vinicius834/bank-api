@@ -37,14 +37,14 @@ func (suite *ServiceTestSuite) TestNewAccount() {
 		errorToReturn   []error
 	}{
 		{
-			newAccount:      account.Account{DocumentNumber: "121221"},
+			newAccount:      account.Account{Document: "121221", AvalaibleLimit: 1000},
 			accountFound:    nil,
-			expectedAccount: &account.Account{ID: primitive.NewObjectID(), DocumentNumber: "121221"},
+			expectedAccount: &account.Account{ID: primitive.NewObjectID(), Document: "121221", AvalaibleLimit: 1000},
 			expectedError:   nil,
 			errorToReturn:   []error{errors.New(helper.NotFoundMessageError)}},
 		{
-			newAccount:      account.Account{DocumentNumber: "121221"},
-			accountFound:    &account.Account{ID: primitive.NewObjectID(), DocumentNumber: "121221"},
+			newAccount:      account.Account{Document: "121221", AvalaibleLimit: 1000},
+			accountFound:    &account.Account{ID: primitive.NewObjectID(), Document: "121221"},
 			expectedAccount: nil,
 			expectedError:   []error{errors.New(helper.DuplicateMessageError)},
 			errorToReturn:   nil},
@@ -69,7 +69,7 @@ func (suite *ServiceTestSuite) TestFindbyID() {
 		expectedError   []error
 	}{
 		{
-			expectedAccount: &account.Account{ID: objectID, DocumentNumber: "121221"},
+			expectedAccount: &account.Account{ID: objectID, Document: "121221"},
 			expectedError:   nil},
 		{
 			expectedAccount: nil,

@@ -77,3 +77,18 @@ func (mr *MockIAccountRepositoryMockRecorder) FindByDocument(documentNumber inte
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByDocument", reflect.TypeOf((*MockIAccountRepository)(nil).FindByDocument), documentNumber)
 }
+
+// UpdateLimit mocks base method
+func (m *MockIAccountRepository) UpdateLimit(accountToUpdate account.Account) (*account.Account, []error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateLimit", accountToUpdate)
+	ret0, _ := ret[0].(*account.Account)
+	ret1, _ := ret[1].([]error)
+	return ret0, ret1
+}
+
+// UpdateLimit indicates an expected call of UpdateLimit
+func (mr *MockIAccountRepositoryMockRecorder) UpdateLimit(accountToUpdate interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLimit", reflect.TypeOf((*MockIAccountRepository)(nil).UpdateLimit), accountToUpdate)
+}
