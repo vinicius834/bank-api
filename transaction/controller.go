@@ -3,7 +3,6 @@ package transaction
 import (
 	"bank-api/helper"
 	"encoding/json"
-	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -31,12 +30,6 @@ func (transactionController *TransactionController) NewTransaction(c *gin.Contex
 	errs := helper.ValidateFields(newTransaction)
 	if helper.ErrorsExist(errs) {
 		c.JSON(http.StatusBadRequest, helper.NewErrorResponse(http.StatusBadRequest, errs))
-		return
-	}
-
-	accountValid := transactionController.helper.AccountValidator(newTransaction.AccountID.Hex())
-	if !accountValid {
-		c.JSON(http.StatusBadRequest, helper.NewErrorResponse(http.StatusBadRequest, []error{errors.New(InvalidAccountError)}))
 		return
 	}
 

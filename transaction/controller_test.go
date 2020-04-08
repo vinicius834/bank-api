@@ -123,7 +123,6 @@ func (suite *ControllerTestSuite) TestNewTransaction() {
 
 	for _, item := range data {
 		gomock.InOrder(
-			suite.mockTransactionHelper.EXPECT().AccountValidator(gomock.Any()).Return(item.accountValid),
 			suite.mockTransactionService.EXPECT().NewTransaction(gomock.Any()).Return(item.transactionCreated, item.expectedError),
 		)
 

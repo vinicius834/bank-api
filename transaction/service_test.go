@@ -129,7 +129,6 @@ func (suite *ServiceTestSuite) TestNewTransaction() {
 	for _, item := range data {
 		gomock.InOrder(
 			suite.mockTransactionRepository.EXPECT().FindOperationTypeById(gomock.Any()).Return(item.operationTypeFound, item.operationTypeError),
-			suite.mockAccountService.EXPECT().CheckAccountHasLimit(gomock.Any(), gomock.Any()).Return(item.checkLimitError),
 			suite.mockAccountService.EXPECT().UpdateLimit(gomock.Any(), gomock.Any()).Return(item.updateLimitError),
 			suite.mockTransactionRepository.EXPECT().NewTransaction(gomock.Any()).Return(item.expectedTransaction, item.expectedError),
 		)

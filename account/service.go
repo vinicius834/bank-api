@@ -56,7 +56,11 @@ func (accountService *AccountService) CheckAccountHasLimit(id string, amountToCh
 func (accountService *AccountService) UpdateLimit(id string, amount float64) []error {
 	accountToUpdate, errs := accountService.accountRepository.FindByID(id)
 	if errs != nil {
-		return []error{errors.New(helper.NotFoundMessageError)}
+		return errs
+	}
+
+	if errs = checkAccountHasLimit(accountToUpdate, amount); errs != nil {
+		return errs
 	}
 
 	accountToUpdate.AvalaibleLimit = accountToUpdate.AvalaibleLimit + amount
@@ -64,6 +68,13 @@ func (accountService *AccountService) UpdateLimit(id string, amount float64) []e
 	_, errs = accountService.accountRepository.UpdateLimit(*accountToUpdate)
 	if helper.ErrorsExist(errs) {
 		return errs
+	}
+	return nil
+}
+
+func checkAccountHasLimit(account *Account, amountToCheck float64) []error {
+	if (account.AvalaibleLimit + amountToCheck) < 0 {
+		return []error{errors.New(AccountHasNotLimitError)}
 	}
 	return nil
 }

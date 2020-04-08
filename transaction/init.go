@@ -3,7 +3,6 @@ package transaction
 import (
 	"bank-api/account"
 	"bank-api/storage"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -43,7 +42,7 @@ func initAccountService(mongoDB storage.IMongoDB) {
 	accountService = account.NewAccountService(account.NewAccountRepository(mongoDB, account.AccountCollection))
 }
 func initHelper() {
-	transactionHelper = NewTransactionHelper(&http.Client{})
+	transactionHelper = NewTransactionHelper()
 }
 
 func initRepository(mongoDB storage.IMongoDB) {
@@ -51,7 +50,7 @@ func initRepository(mongoDB storage.IMongoDB) {
 }
 
 func initService() {
-	transactionService = NewTransactionServiceWithAccount(transactionRepository, transactionHelper, accountService)
+	transactionService = NewTransactionService(transactionRepository, transactionHelper, accountService)
 }
 
 func initControllers() {

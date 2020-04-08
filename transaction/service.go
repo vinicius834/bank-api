@@ -18,13 +18,6 @@ type ITransactionService interface {
 	NewOperationType(newOperationType OperationType) (*OperationType, []error)
 }
 
-func NewTransactionServiceWithAccount(
-	transactionRepository ITransactionRepository,
-	transactionHelper IHelper,
-	accountService account.IAccountService) *TransactionService {
-	return &TransactionService{transactionRepository: transactionRepository, transactionHelper: transactionHelper, accountService: accountService}
-}
-
 func NewTransactionService(transactionRepository ITransactionRepository, transactionHelper IHelper, accountService account.IAccountService) *TransactionService {
 	return &TransactionService{transactionRepository: transactionRepository, transactionHelper: transactionHelper, accountService: accountService}
 }
@@ -38,11 +31,6 @@ func (transactionService *TransactionService) NewTransaction(newTransaction Tran
 
 	newTransaction.EventDate = time.Now().Format(time.RFC3339Nano)
 	newTransaction.Amount = transactionService.transactionHelper.TransformAmount(newTransaction.Amount, operationType.IsCredit)
-
-	errs = transactionService.accountService.CheckAccountHasLimit(newTransaction.AccountID.Hex(), newTransaction.Amount)
-	if helper.ErrorsExist(errs) {
-		return nil, errs
-	}
 
 	errs = transactionService.accountService.UpdateLimit(newTransaction.AccountID.Hex(), newTransaction.Amount)
 	if helper.ErrorsExist(errs) {
